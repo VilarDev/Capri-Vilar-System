@@ -1,7 +1,8 @@
 package com.vilardev.capril_vilar.entities;
 
-import jakarta.persistence.*;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import java.time.LocalDate;
 
@@ -18,25 +19,72 @@ import java.time.LocalDate;
 public class Goat {
 
     @Id
+    @Column(name = "registration_number", unique = true, nullable = false, length = 20)
     @EqualsAndHashCode.Include
+    @NotBlank(message = "Registration number cannot be blank")
+    @Pattern(regexp = "^[A-Z]{2}-\\d{4}-\\d{3}$", message = "Invalid registration number format")
     @Schema(
             description = "Número de registro oficial (identificador único)",
-            example = "TOD + TOE + ANO + ORDEM DE NASCIMENTOS",
-            required = true
+            example = "GO-2023-001",
+            requiredMode = Schema.RequiredMode.REQUIRED
     )
-    private String registrationNumber; // Agora é o ID
+    private String registrationNumber;
 
-    @Schema(description = "Nome da cabra", example = "Bella", required = true)
+    @Column(nullable = false, length = 100)
+    @NotBlank(message = "Name cannot be blank")
+    @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
+    @Schema(description = "Nome oficial da cabra", example = "Bella", requiredMode = Schema.RequiredMode.REQUIRED)
     private String name;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 10)
+    @Schema(description = "Sexo biológico", example = "FEMALE", requiredMode = Schema.RequiredMode.REQUIRED)
+    private Gender gender;
 
-    @ManyToOne
+    @Column(length = 50)
+    @Schema(description = "Raça da cabra", example = "Saanen")
+    private String breed;
+
+    @Column(length = 30)
+    @Schema(description = "Cor predominante", example = "Branca")
+    private String color;
+
+    @Column(name = "birth_date", nullable = false)
+    @Past(message = "Birth date must be in the past")
+    @Schema(description = "Data de nascimento no formato ISO", example = "2023-05-15", type = "string", format = "date")
+    private LocalDate birthDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 15)
+    @Schema(description = "Status atual no rebanho", example = "ACTIVE")
+    private GoatStatus status;
+
+    @Column(name = "tag_right_ear", length = 15)
+    @Pattern(regexp = "^[A-Z]{2}-\\d{5}$", message = "Right ear tag format invalid")
+    @Schema(description = "Número da tag da orelha direita", example = "TR-16422")
+    private String tod;
+
+    @Column(name = "tag_left_ear", length = 15)
+    @Pattern(regexp = "^[A-Z]{2}-\\d{5}$", message = "Left ear tag format invalid")
+    @Schema(description = "Número da tag da orelha esquerda", example = "TL-16423")
+    private String toe;
+
+    @Column(length = 10)
+    @Schema(description = "Categoria de pureza da raça", example = "PO", allowableValues = {"PO", "PC", "LA"})
+    private String category;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "father_registration_number", referencedColumnName = "registration_number")
     @Schema(description = "Referência paterna")
     private Goat father;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mother_registration_number", referencedColumnName = "registration_number")
     @Schema(description = "Referência materna")
     private Goat mother;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "farm_id")
+    @Schema(description = "Fazenda onde a cabra está registrada")
+    private GoatFarm farm;
 }
