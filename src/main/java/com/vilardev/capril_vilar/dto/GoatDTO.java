@@ -1,6 +1,7 @@
 package com.vilardev.capril_vilar.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.vilardev.capril_vilar.entities.Gender;
 import com.vilardev.capril_vilar.entities.GoatStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -23,9 +24,11 @@ public class GoatDTO {
     @Schema(example = "Branca", description = "Coloração predominante do animal")
     private String color;
 
-    @Schema(example = "Fêmea", description = "Gênero do animal",
-            allowableValues = {"Fêmea", "Macho"})
-    private String gender;
+    @Schema(implementation = Gender.class,
+            description = "Gênero biológico do animal",
+            example = "FEMALE",
+            allowableValues = {"MALE", "FEMALE", "UNKNOWN"})
+    private Gender gender;  // Agora usando enum
 
     @Schema(example = "PO",
             description = "Categoria de pureza da raça (PO = Puro de Origem)",
@@ -34,7 +37,7 @@ public class GoatDTO {
 
     @Schema(example = "16422",
             description = "Número de identificação da orelha direita (TOD - Tag Orelha Direita)",
-            pattern = "\\d{1,10}")  // Expressão regular para validação
+            pattern = "\\d{1,10}")
     private String tod;
 
     @Schema(example = "16423",
@@ -48,7 +51,7 @@ public class GoatDTO {
 
     @Schema(implementation = GoatStatus.class,
             description = "Status de vida útil do animal no sistema",
-            example = "ATIVO")
+            example = "ACTIVE")
     private GoatStatus status;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
