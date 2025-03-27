@@ -1,17 +1,11 @@
-package com.vilardev.capril_vilar.entities;
+package com.vilardev.capril_vilar.dto;
 
-import lombok.*;
+import com.vilardev.capril_vilar.entities.Goat;
+import com.vilardev.capril_vilar.entities.GoatStatus;
 
 import java.time.LocalDate;
 
-@AllArgsConstructor
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
-public class Goat {
-
-    private String registrationNumber;
+public class GoatDTO {
 
     private String name;
     private String breed;
@@ -27,6 +21,6 @@ public class Goat {
     private Goat father;
     private Goat mother;
 
-    public Goat() {
+    public GoatDTO() {
     }
 }
