@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "owners")
 @Getter
@@ -31,18 +34,24 @@ public class Owner {
             required = true)
     private String name;
 
-
     @Schema(description = "Primary contact email",
             example = "owner@example.com",
             required = true,
             format = "email")
     private String email;
 
-    // Optional: Add timestamp fields
-    // @CreationTimestamp
-    // private LocalDateTime createdAt;
+    // Relação com Address (endereço)
+    @ManyToOne
+    @JoinColumn(name = "address_id", referencedColumnName = "id")  // Cria a coluna address_id
+    @Schema(description = "Address of the owner")
+    private Address address;
 
-    // Optional: Add relationship
-    // @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
-    // private List<Animal> animals;
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Schema(description = "List of phone numbers associated with this owner")
+    private Set<Phone> phones = new HashSet<>();
+
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Schema(description = "List of goat farms owned by this owner")
+    private Set<GoatFarm> goatFarms = new HashSet<>();
+
 }

@@ -4,6 +4,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "goat_farms")
 @Getter
@@ -33,7 +36,22 @@ public class GoatFarm {
     )
     private String tod;
 
-    // Relacionamentos podem ser adicionados posteriormente
-    // @OneToMany(mappedBy = "farm")
-    // private List<Goat> goats;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id")
+    @Schema(description = "Owner associated with this goat farm")
+    private Owner owner;
+
+    @OneToMany(mappedBy = "goatFarm", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Schema(description = "List of goats owned by this farm")
+    private Set<Goat> goats = new HashSet<>();
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id")
+    @Schema(description = "Address associated with this goat farm")
+    private Address address;
+
+    @OneToMany(mappedBy = "goatFarm", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Schema(description = "List of phone numbers associated with this goat farm")
+    private Set<Phone> phones = new HashSet<>();
+
 }

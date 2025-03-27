@@ -2,8 +2,12 @@ package com.vilardev.capril_vilar.entities;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.*;
+
 import java.time.LocalDate;
 
 @Entity
@@ -54,9 +58,10 @@ public class Goat {
     @Schema(description = "Data de nascimento no formato ISO", example = "2023-05-15", type = "string", format = "date")
     private LocalDate birthDate;
 
-    @Enumerated(EnumType.STRING)
+
     @Column(nullable = false, length = 15)
     @Schema(description = "Status atual no rebanho", example = "ACTIVE")
+    @Enumerated(EnumType.STRING)
     private GoatStatus status;
 
     @Column(name = "tag_right_ear", length = 15)
@@ -74,17 +79,17 @@ public class Goat {
     private String category;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "father_registration_number", referencedColumnName = "registration_number")
+    @JoinColumn(name = "father_id", referencedColumnName = "registration_number")
     @Schema(description = "Referência paterna")
     private Goat father;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mother_registration_number", referencedColumnName = "registration_number")
+    @JoinColumn(name = "mother_id", referencedColumnName = "registration_number")
     @Schema(description = "Referência materna")
     private Goat mother;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "farm_id")
+    @JoinColumn(name = "GOAT_FARM_ID")
     @Schema(description = "Fazenda onde a cabra está registrada")
-    private GoatFarm farm;
+    private GoatFarm goatFarm;
 }
