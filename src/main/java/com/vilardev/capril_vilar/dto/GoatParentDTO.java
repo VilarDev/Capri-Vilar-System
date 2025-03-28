@@ -4,23 +4,22 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
-@Schema(description = "Informações básicas para montagem da genealogia do animal")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Schema(description = "DTO para representar os pais de uma cabra")
 public class GoatParentDTO {
 
-    @Schema(example = "Thor", description = "Nome registrado do pai na associação")
+    @Schema(description = "Nome do pai", example = "C.V.C SIGNOS PETROLEO")
     private String fatherName;
 
-    @Schema(example = "GOAT-001", description = "Número de registro único do pai")
+    @Schema(description = "Número de registro do pai", example = "1635717065")
     private String fatherRegistrationNumber;
 
-    @Schema(example = "Freyja", description = "Nome registrado da mãe na associação")
+    @Schema(description = "Nome da mãe", example = "NAIDE DO CRS")
     private String motherName;
 
-    @Schema(example = "GOAT-002", description = "Número de registro único da mãe")
+    @Schema(description = "Número de registro da mãe", example = "2114517012")
     private String motherRegistrationNumber;
-
-    public GoatParentDTO() {
-    }
 }

@@ -26,10 +26,9 @@ public class Goat {
     @Column(name = "registration_number", unique = true, nullable = false, length = 20)
     @EqualsAndHashCode.Include
     @NotBlank(message = "Registration number cannot be blank")
-    @Pattern(regexp = "^[A-Z]{2}-\\d{4}-\\d{3}$", message = "Invalid registration number format")
     @Schema(
             description = "Número de registro oficial (identificador único)",
-            example = "GO-2023-001",
+            example = "1643218013",
             requiredMode = Schema.RequiredMode.REQUIRED
     )
     private String registrationNumber;
@@ -75,7 +74,8 @@ public class Goat {
     private String toe;
 
     @Column(length = 10)
-    @Schema(description = "Categoria de pureza da raça", example = "PO", allowableValues = {"PO", "PC", "LA"})
+    @Schema(description = "Categoria de pureza da raça", example = "PO",
+            allowableValues = {"PO", "PC", "LA"})
     private String category;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -89,7 +89,7 @@ public class Goat {
     private Goat mother;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "GOAT_FARM_ID")
+    @JoinColumn(name = "goat_farm_id")
     @Schema(description = "Fazenda onde a cabra está registrada")
     private GoatFarm goatFarm;
 }
